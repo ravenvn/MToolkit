@@ -1,16 +1,170 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MToolkit.Helpers
 {
     class LoginHelper
     {
-        public static string Login(string email, string password, string recoveryEmail)
+        public Configs config = JsonConvert.DeserializeObject<Configs>(File.ReadAllText("Configs.json"));
+
+        public string Login(string email, string password, string recoveryEmail)
         {
-            return email + ":" + password + ":" + recoveryEmail;
+            var response = new LoginResponse
+            {
+                Status = false,
+                Detail_Reason = string.Empty
+            };
+
+            ChromeDriver driver = null;
+            try
+            {
+                var service = ChromeDriverService.CreateDefaultService();
+                service.HideCommandPromptWindow = true;
+                var options = new ChromeOptions();
+                options.BinaryLocation = @"C:\chrome-win32\chrome.exe";
+                options.AddArguments("disable-infobars");
+                options.AddArguments("start-maximized");
+                options.AddArguments("--incognito");
+
+
+                driver = new ChromeDriver(service, options);
+                driver.Navigate().GoToUrl("https://accounts.google.com/signin/v2/identifier");
+
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+                try
+                {
+                    var mailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("identifierId")));
+                    mailInput.SendKeys(email);
+                    mailInput.SendKeys(Keys.Enter);
+                }
+                catch (Exception)
+                {
+                    response.Detail_Reason = "Mạng lỗi";
+
+                    if (driver != null)
+                    {
+                        driver.Close();
+                        driver.Quit();
+                    }
+
+                    return JsonConvert.SerializeObject(response);
+                }
+
+                try
+                {
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    var passwordInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
+                    passwordInput.SendKeys(password);
+                    passwordInput.SendKeys(Keys.Enter);
+                }
+                catch (Exception)
+                {
+                    response.Detail_Reason = "Tài khoản không tồn tại";
+
+                    if (driver != null)
+                    {
+                        driver.Close();
+                        driver.Quit();
+                    }
+
+                    return JsonConvert.SerializeObject(response);
+                }
+
+                try
+                {
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.Name("password")));
+                }
+                catch (Exception)
+                {
+                    response.Detail_Reason = "Sai mật khẩu";
+
+                    if (driver != null)
+                    {
+                        driver.Close();
+                        driver.Quit();
+                    }
+
+                    return JsonConvert.SerializeObject(response);
+                }
+
+                try
+                {
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("vxx8jf")));
+                    var confirmOptionButtons = driver.FindElementsByClassName("vxx8jf").Where(x => x.Displayed).ToArray();
+                    var numOptions = confirmOptionButtons.Length;
+                    if (numOptions > 0)
+                    {
+                        var confirmRecoveryEmailOptionButton = numOptions <= 3 ? confirmOptionButtons[0] : confirmOptionButtons[numOptions - 2];
+                        confirmRecoveryEmailOptionButton.Click();
+
+                        try
+                        {
+                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                            var recoveryMailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("knowledgePreregisteredEmailResponse")));
+                            recoveryMailInput.SendKeys(recoveryEmail);
+                            recoveryMailInput.SendKeys(Keys.Enter);
+                            try
+                            {
+                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                                wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.Name("knowledgePreregisteredEmailResponse")));
+                                response.Status = true;
+                            }
+                            catch (Exception)
+                            {
+                                response.Detail_Reason = "Sai email khôi phục";
+
+                                if (driver != null)
+                                {
+                                    driver.Close();
+                                    driver.Quit();
+                                }
+
+                                return JsonConvert.SerializeObject(response);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            response.Detail_Reason = "Không hỗ trợ xác nhận bằng email khôi phục";
+
+                            if (driver != null)
+                            {
+                                driver.Close();
+                                driver.Quit();
+                            }
+
+                            return JsonConvert.SerializeObject(response);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    response.Status = true;
+                }
+            }
+            catch (Exception e)
+            {
+                response.Detail_Reason = e.Message;
+            }
+
+            if (driver != null)
+            {
+                driver.Close();
+                driver.Quit();
+            }
+
+            return JsonConvert.SerializeObject(response);
         }
     }
 }
