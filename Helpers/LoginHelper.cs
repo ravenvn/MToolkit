@@ -190,5 +190,64 @@ namespace MToolkit.Helpers
 
             return JsonConvert.SerializeObject(response);
         }
+
+        public string LoginByCookie(string cookie)
+        {
+            var response = new LoginResponse
+            {
+                Status = false,
+                Detail_Reason = string.Empty,
+                Cookie = cookie
+            };
+
+            ChromeDriver driver = null;
+            try
+            {
+                var service = ChromeDriverService.CreateDefaultService();
+                service.HideCommandPromptWindow = true;
+                var options = new ChromeOptions();
+                options.BinaryLocation = @"C:\chrome-win32\chrome.exe";
+                options.AddArguments("disable-infobars");
+                options.AddArguments("start-maximized");
+                options.AddArguments("--incognito");
+
+
+                driver = new ChromeDriver(service, options);
+                driver.Navigate().GoToUrl("https://www.youtube.com");
+                var cookies = cookie.Split(';');
+                foreach (var c in cookies)
+                {
+                    var pair = c.Split('=');
+                    if (pair.Count() == 2)
+                    {
+                        driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie(pair[0].Trim(), pair[1].Trim()));
+                    }
+                }
+                driver.Navigate().Refresh();
+
+                try
+                {
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+                    wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
+                    response.Status = true;
+                }
+                catch (Exception)
+                {
+                    response.Detail_Reason = "Cookie hết hạn";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Detail_Reason = ex.Message;
+            }
+            
+            if (driver != null)
+            {
+                driver.Close();
+                driver.Quit();
+            }
+
+            return JsonConvert.SerializeObject(response);
+        }
     }
 }

@@ -51,12 +51,15 @@ namespace MToolkit
 
         private string Response(HttpListenerRequest request)
         {
-            if (request.Url.AbsolutePath == "/login-gmail")
+            switch (request.Url.AbsolutePath)
             {
-                return loginHelper.Login(request.QueryString["email"], request.QueryString["password"], request.QueryString["recovery_email"]);
-            }
-
-            return loginHelper.Login(request.QueryString["email"], request.QueryString["password"], request.QueryString["recovery_email"]); 
+                case "/login-gmail":
+                    return loginHelper.Login(request.QueryString["email"], request.QueryString["password"], request.QueryString["recovery_email"]);
+                case "/login-by-cookie":
+                    return loginHelper.LoginByCookie(request.QueryString["cookie"]);
+                default:
+                    return string.Empty;
+            }    
         }
 
         private void BtnCleanAllProcess_Click(object sender, EventArgs e)
