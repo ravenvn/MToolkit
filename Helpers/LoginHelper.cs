@@ -22,7 +22,8 @@ namespace MToolkit.Helpers
             var response = new LoginResponse
             {
                 Status = false,
-                Detail_Reason = string.Empty
+                Detail_Reason = string.Empty,
+                Cookie = null
             };
 
             ChromeDriver driver = null;
@@ -156,6 +157,29 @@ namespace MToolkit.Helpers
             catch (Exception e)
             {
                 response.Detail_Reason = e.Message;
+            }
+
+            if (response.Status == true)
+            {
+                try
+                {
+                    driver.Navigate().GoToUrl("https://www.youtube.com/");
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+                    var avatarBtn = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
+                    var loginCookies = driver.Manage().Cookies.AllCookies;
+                    var cookie = string.Empty;
+                    foreach (var loginCookie in loginCookies)
+                    {
+                        cookie += loginCookie.Name + "=" + loginCookie.Value + ";";
+                    }
+                    response.Cookie = cookie;
+                }
+                catch (Exception)
+                {
+                    response.Status = false;
+                    response.Detail_Reason = "Tài khoản Youtube bị chết";
+                }
+                
             }
 
             if (driver != null)

@@ -10,5 +10,6 @@ namespace MToolkit
     {
         public bool Status { get; set; }
         public string Detail_Reason { get; set; }
+        public string Cookie { get; set; }
     }
 }

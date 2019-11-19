@@ -38,7 +38,7 @@ namespace MToolkit
             if (btnStart.Text == "Start")
             {
                 btnStart.Text = "Stop";
-                ws = new WebServer(Login, "http://localhost:8080/login-gmail/");
+                ws = new WebServer(Response, "http://localhost:8080/");
                 ws.Run();
             }
             else
@@ -49,8 +49,13 @@ namespace MToolkit
             }
         }
 
-        private string Login(HttpListenerRequest request)
+        private string Response(HttpListenerRequest request)
         {
+            if (request.Url.AbsolutePath == "/login-gmail")
+            {
+                return loginHelper.Login(request.QueryString["email"], request.QueryString["password"], request.QueryString["recovery_email"]);
+            }
+
             return loginHelper.Login(request.QueryString["email"], request.QueryString["password"], request.QueryString["recovery_email"]); 
         }
 
@@ -76,7 +81,7 @@ namespace MToolkit
         private void BtnSaveConfig_Click(object sender, EventArgs e)
         {
             loginHelper.config.Page_Load = Int32.Parse(txtPageLoad.Text);
-            loginHelper.config.Enter_Load = Int32.Parse(txtEnterLoad.Text);
+            loginHelper.config.Enter_Load = Int32.Parse(txtPageLoad.Text);
             var configJson = JsonConvert.SerializeObject(loginHelper.config);
             var jsonFormatted = JValue.Parse(configJson).ToString(Formatting.Indented);
 

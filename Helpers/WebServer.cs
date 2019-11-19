@@ -67,6 +67,9 @@ namespace MToolkit.Helpers
                                 var rstr = _responderMethod(ctx.Request);
                                 var buf = Encoding.UTF8.GetBytes(rstr);
                                 ctx.Response.ContentLength64 = buf.Length;
+                                ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
+                                ctx.Response.AddHeader("Access-Control-Allow-Headers", "*");
+                                ctx.Response.AddHeader("Access-Control-Allow-Methods", "POST, GET");
                                 ctx.Response.OutputStream.Write(buf, 0, buf.Length);
                             }
                             catch
