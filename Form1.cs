@@ -31,6 +31,7 @@ namespace MToolkit
         {
             txtPageLoad.Text = loginHelper.config.Page_Load.ToString();
             txtEnterLoad.Text = loginHelper.config.Enter_Load.ToString();
+            txtManualLoad.Text = loginHelper.config.Manual_Load.ToString();
         }
 
         private void BtnStart_Click(object sender, EventArgs e)
@@ -55,6 +56,8 @@ namespace MToolkit
             {
                 case "/login-gmail":
                     return loginHelper.Login(request.QueryString["email"], request.QueryString["password"], request.QueryString["recovery_email"]);
+                case "/manual-login":
+                    return loginHelper.ManualLogin(request.QueryString["email"], request.QueryString["password"]);
                 case "/login-by-cookie":
                     return loginHelper.LoginByCookie(request.QueryString["cookie"]);
                 default:
@@ -85,6 +88,7 @@ namespace MToolkit
         {
             loginHelper.config.Page_Load = Int32.Parse(txtPageLoad.Text);
             loginHelper.config.Enter_Load = Int32.Parse(txtPageLoad.Text);
+            loginHelper.config.Manual_Load = Int32.Parse(txtManualLoad.Text);
             var configJson = JsonConvert.SerializeObject(loginHelper.config);
             var jsonFormatted = JValue.Parse(configJson).ToString(Formatting.Indented);
 

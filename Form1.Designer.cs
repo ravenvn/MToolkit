@@ -41,6 +41,8 @@
             this.btnSaveConfig = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.txtEnterLoad = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtManualLoad = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -112,6 +114,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label3);
+            this.tabPage2.Controls.Add(this.txtManualLoad);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.txtEnterLoad);
             this.tabPage2.Controls.Add(this.btnSaveConfig);
@@ -167,6 +171,22 @@
             this.txtEnterLoad.Size = new System.Drawing.Size(106, 26);
             this.txtEnterLoad.TabIndex = 3;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(23, 77);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(333, 20);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Thời gian tối đa mỗi hành động thủ công (giây)";
+            // 
+            // txtManualLoad
+            // 
+            this.txtManualLoad.Location = new System.Drawing.Point(362, 74);
+            this.txtManualLoad.Name = "txtManualLoad";
+            this.txtManualLoad.Size = new System.Drawing.Size(106, 26);
+            this.txtManualLoad.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -202,6 +222,8 @@
         private System.Windows.Forms.TextBox txtPageLoad;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtEnterLoad;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtManualLoad;
     }
 }
 

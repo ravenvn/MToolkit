@@ -10,5 +10,6 @@ namespace MToolkit
     {
         public int Page_Load { get; set; }
         public int Enter_Load { get; set; }
+        public int Manual_Load { get; set; }
     }
 }
