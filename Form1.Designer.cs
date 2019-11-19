@@ -43,6 +43,8 @@
             this.txtEnterLoad = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtManualLoad = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtChromePath = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -114,6 +116,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label4);
+            this.tabPage2.Controls.Add(this.txtChromePath);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.txtManualLoad);
             this.tabPage2.Controls.Add(this.label2);
@@ -147,7 +151,7 @@
             // 
             // btnSaveConfig
             // 
-            this.btnSaveConfig.Location = new System.Drawing.Point(440, 138);
+            this.btnSaveConfig.Location = new System.Drawing.Point(391, 219);
             this.btnSaveConfig.Name = "btnSaveConfig";
             this.btnSaveConfig.Size = new System.Drawing.Size(150, 60);
             this.btnSaveConfig.TabIndex = 2;
@@ -187,6 +191,22 @@
             this.txtManualLoad.Size = new System.Drawing.Size(106, 26);
             this.txtManualLoad.TabIndex = 5;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(23, 126);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(222, 20);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Thư mục chứa file Chrome.exe";
+            // 
+            // txtChromePath
+            // 
+            this.txtChromePath.Location = new System.Drawing.Point(264, 123);
+            this.txtChromePath.Name = "txtChromePath";
+            this.txtChromePath.Size = new System.Drawing.Size(589, 26);
+            this.txtChromePath.TabIndex = 7;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -224,6 +244,8 @@
         private System.Windows.Forms.TextBox txtEnterLoad;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtManualLoad;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtChromePath;
     }
 }
 

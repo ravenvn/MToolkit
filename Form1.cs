@@ -32,6 +32,7 @@ namespace MToolkit
             txtPageLoad.Text = loginHelper.config.Page_Load.ToString();
             txtEnterLoad.Text = loginHelper.config.Enter_Load.ToString();
             txtManualLoad.Text = loginHelper.config.Manual_Load.ToString();
+            txtChromePath.Text = loginHelper.config.Chrome_Path;
         }
 
         private void BtnStart_Click(object sender, EventArgs e)
@@ -89,6 +90,7 @@ namespace MToolkit
             loginHelper.config.Page_Load = Int32.Parse(txtPageLoad.Text);
             loginHelper.config.Enter_Load = Int32.Parse(txtPageLoad.Text);
             loginHelper.config.Manual_Load = Int32.Parse(txtManualLoad.Text);
+            loginHelper.config.Chrome_Path = txtChromePath.Text.Trim();
             var configJson = JsonConvert.SerializeObject(loginHelper.config);
             var jsonFormatted = JValue.Parse(configJson).ToString(Formatting.Indented);
 

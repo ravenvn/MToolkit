@@ -32,7 +32,7 @@ namespace MToolkit.Helpers
                 var service = ChromeDriverService.CreateDefaultService();
                 service.HideCommandPromptWindow = true;
                 var options = new ChromeOptions();
-                options.BinaryLocation = @"C:\chrome-win32\chrome.exe";
+                options.BinaryLocation = config.Chrome_Path;
                 options.AddArguments("disable-infobars");
                 options.AddArguments("start-maximized");
                 options.AddArguments("--incognito");
@@ -206,7 +206,7 @@ namespace MToolkit.Helpers
                 var service = ChromeDriverService.CreateDefaultService();
                 service.HideCommandPromptWindow = true;
                 var options = new ChromeOptions();
-                options.BinaryLocation = @"C:\chrome-win32\chrome.exe";
+                options.BinaryLocation = config.Chrome_Path;
                 options.AddArguments("disable-infobars");
                 options.AddArguments("start-maximized");
                 options.AddArguments("--incognito");
@@ -344,7 +344,7 @@ namespace MToolkit.Helpers
                 var service = ChromeDriverService.CreateDefaultService();
                 service.HideCommandPromptWindow = true;
                 var options = new ChromeOptions();
-                options.BinaryLocation = @"C:\chrome-win32\chrome.exe";
+                options.BinaryLocation = config.Chrome_Path;
                 options.AddArguments("disable-infobars");
                 options.AddArguments("start-maximized");
                 options.AddArguments("--incognito");
