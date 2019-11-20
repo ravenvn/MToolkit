@@ -377,6 +377,14 @@ namespace MToolkit.Helpers
                     cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
                 }
 
+                driver.Navigate().GoToUrl("https://docs.google.com/document/u/0/");
+                Thread.Sleep(2000);
+                cookies = driver.Manage().Cookies.AllCookies;
+                foreach (var cookie in cookies)
+                {
+                    cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
+                }
+
                 response.Cookie = cookieString;
             }
             catch (Exception)
