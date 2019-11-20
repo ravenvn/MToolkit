@@ -37,7 +37,6 @@ namespace MToolkit.Helpers
                 options.AddArguments("start-maximized");
                 options.AddArguments("--incognito");
 
-
                 driver = new ChromeDriver(service, options);
                 driver.Navigate().GoToUrl("https://accounts.google.com/signin/v2/identifier");
 
@@ -161,25 +160,7 @@ namespace MToolkit.Helpers
 
             if (response.Status == true)
             {
-                try
-                {
-                    driver.Navigate().GoToUrl("https://www.youtube.com/");
-                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
-                    var avatarBtn = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
-                    var loginCookies = driver.Manage().Cookies.AllCookies;
-                    var cookie = string.Empty;
-                    foreach (var loginCookie in loginCookies)
-                    {
-                        cookie += loginCookie.Name + "=" + loginCookie.Value + ";";
-                    }
-                    response.Cookie = cookie;
-                }
-                catch (Exception)
-                {
-                    response.Status = false;
-                    response.Detail_Reason = "Tài khoản Youtube bị chết";
-                }
-                
+                GetCookie(driver, ref response);
             }
 
             if (driver != null)
@@ -299,25 +280,7 @@ namespace MToolkit.Helpers
 
             if (response.Status == true)
             {
-                try
-                {
-                    driver.Navigate().GoToUrl("https://www.youtube.com/");
-                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
-                    var avatarBtn = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
-                    var loginCookies = driver.Manage().Cookies.AllCookies;
-                    var cookie = string.Empty;
-                    foreach (var loginCookie in loginCookies)
-                    {
-                        cookie += loginCookie.Name + "=" + loginCookie.Value + ";";
-                    }
-                    response.Cookie = cookie;
-                }
-                catch (Exception)
-                {
-                    response.Status = false;
-                    response.Detail_Reason = "Tài khoản Youtube bị chết";
-                }
-
+                GetCookie(driver, ref response);
             }
 
             if (driver != null)
@@ -329,13 +292,13 @@ namespace MToolkit.Helpers
             return JsonConvert.SerializeObject(response);
         }
 
-        public string LoginByCookie(string cookie)
+        public string LoginByCookie(string cookieString)
         {
             var response = new LoginResponse
             {
                 Status = false,
                 Detail_Reason = string.Empty,
-                Cookie = cookie
+                Cookie = cookieString
             };
 
             ChromeDriver driver = null;
@@ -352,14 +315,18 @@ namespace MToolkit.Helpers
 
                 driver = new ChromeDriver(service, options);
                 driver.Navigate().GoToUrl("https://www.youtube.com");
-                var cookies = cookie.Split(';');
-                foreach (var c in cookies)
+                var cookies = cookieString.Split('\n');
+                foreach (var cookie in cookies)
                 {
-                    var pair = c.Split('=');
-                    if (pair.Count() == 2)
+                    var item = cookie.Split(';');
+                    DateTime? expiry = null;
+                    try
                     {
-                        driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie(pair[0].Trim(), pair[1].Trim()));
+                        expiry = DateTime.Parse(item[4]);
                     }
+                    catch (Exception) { }
+                    var c = new Cookie(item[0], item[1], item[2], item[3], expiry);
+                    driver.Manage().Cookies.AddCookie(c);
                 }
                 driver.Navigate().Refresh();
 
@@ -386,6 +353,37 @@ namespace MToolkit.Helpers
             }
 
             return JsonConvert.SerializeObject(response);
+        }
+
+        private void GetCookie(ChromeDriver driver, ref LoginResponse response)
+        {
+            try
+            {
+                var cookieString = string.Empty;
+                driver.Navigate().GoToUrl("https://www.youtube.com/");
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+                var avatarBtn = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
+                var cookies = driver.Manage().Cookies.AllCookies;
+                foreach (var cookie in cookies)
+                {
+                    cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
+                }
+
+                driver.Navigate().GoToUrl("https://mail.google.com/mail/u/0/#inbox");
+                Thread.Sleep(2000);
+                cookies = driver.Manage().Cookies.AllCookies;
+                foreach (var cookie in cookies)
+                {
+                    cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
+                }
+
+                response.Cookie = cookieString;
+            }
+            catch (Exception)
+            {
+                response.Status = false;
+                response.Detail_Reason = "Không lấy được cookie";
+            }
         }
     }
 }
