@@ -19,6 +19,7 @@ namespace MToolkit
     public partial class Form1 : Form
     {
         private LoginHelper loginHelper = new LoginHelper();
+        private ViewHelper viewHelper = new ViewHelper();
         private WebServer ws;
         public Form1()
         {
@@ -33,6 +34,8 @@ namespace MToolkit
             txtEnterLoad.Text = loginHelper.config.Enter_Load.ToString();
             txtManualLoad.Text = loginHelper.config.Manual_Load.ToString();
             txtChromePath.Text = loginHelper.config.Chrome_Path;
+            txtManageSiteUrl.Text = loginHelper.config.Manage_Site_Url;
+            txtActionSleep.Text = loginHelper.config.Action_Sleep.ToString();
         }
 
         private void BtnStart_Click(object sender, EventArgs e)
@@ -40,7 +43,7 @@ namespace MToolkit
             if (btnStart.Text == "Start")
             {
                 btnStart.Text = "Stop";
-                ws = new WebServer(Response, "http://localhost:8080/");
+                ws = new WebServer(Response, "http://127.0.0.1:8080/", "http://localhost:8080/");
                 ws.Run();
             }
             else
@@ -61,6 +64,21 @@ namespace MToolkit
                     return loginHelper.ManualLogin(request.QueryString["email"], request.QueryString["password"]);
                 case "/login-by-cookie":
                     return loginHelper.LoginByCookie(request.QueryString["cookie"]);
+                case "/bots/auto-view":
+                    var accounts = JsonConvert.DeserializeObject<Account[]>(request.QueryString["accounts"]);
+                    var data = new ViewData
+                    {
+                        Accounts = accounts,
+                        FilterType = request.QueryString["filter_type"],
+                        TitleVideoIds = request.QueryString["title_video_ids"],
+                        DurationMin = Int32.Parse(request.QueryString["duration_min"]),
+                        DurationMax = Int32.Parse(request.QueryString["duration_max"]),
+                        Sub = request.QueryString["sub"] == "1" ? true : false,
+                        SubRatio = Int32.Parse(request.QueryString["sub_ratio"]),
+                        Like = request.QueryString["like"] == "1" ? true : false,
+                        LikeRatio = Int32.Parse(request.QueryString["like_ratio"])
+                    };
+                    return viewHelper.AutoView(data);
                 default:
                     return string.Empty;
             }    
@@ -68,10 +86,16 @@ namespace MToolkit
 
         private void BtnCleanAllProcess_Click(object sender, EventArgs e)
         {
+            foreach (var process in Process.GetProcessesByName("geckodriver"))
+            {
+                process.Kill();
+            }
+            
             foreach (var process in Process.GetProcessesByName("chromedriver"))
             {
                 process.Kill();
             }
+            
             MessageBox.Show("Đã dọn sạch hết các tiến trình chạy ngầm");
         }
 
@@ -90,6 +114,8 @@ namespace MToolkit
             loginHelper.config.Page_Load = Int32.Parse(txtPageLoad.Text);
             loginHelper.config.Enter_Load = Int32.Parse(txtPageLoad.Text);
             loginHelper.config.Manual_Load = Int32.Parse(txtManualLoad.Text);
+            loginHelper.config.Manage_Site_Url = txtManageSiteUrl.Text.Trim();
+            loginHelper.config.Action_Sleep = Int32.Parse(txtActionSleep.Text);
             loginHelper.config.Chrome_Path = txtChromePath.Text.Trim();
             var configJson = JsonConvert.SerializeObject(loginHelper.config);
             var jsonFormatted = JValue.Parse(configJson).ToString(Formatting.Indented);

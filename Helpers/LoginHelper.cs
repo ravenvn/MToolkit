@@ -23,7 +23,9 @@ namespace MToolkit.Helpers
             {
                 Status = false,
                 Detail_Reason = string.Empty,
-                Cookie = null
+                Cookie = null,
+                Channel_Name = string.Empty,
+                Channel_Link = string.Empty
             };
 
             ChromeDriver driver = null;
@@ -178,7 +180,9 @@ namespace MToolkit.Helpers
             {
                 Status = false,
                 Detail_Reason = string.Empty,
-                Cookie = null
+                Cookie = null,
+                Channel_Name = string.Empty,
+                Channel_Link = string.Empty
             };
 
             ChromeDriver driver = null;
@@ -360,32 +364,43 @@ namespace MToolkit.Helpers
             try
             {
                 var cookieString = string.Empty;
-                driver.Navigate().GoToUrl("https://www.youtube.com/");
+                driver.Navigate().GoToUrl("https://studio.youtube.com/channel/");
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
                 var avatarBtn = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
-                var cookies = driver.Manage().Cookies.AllCookies;
-                foreach (var cookie in cookies)
+                if (driver.Url.Contains("https://studio.youtube.com/channel/"))
                 {
-                    cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
-                }
+                    response.Channel_Link = "https://www.youtube.com/channel/" + driver.Url.Replace("https://studio.youtube.com/channel/", "");
+                    response.Channel_Name = driver.FindElementById("entity-name").Text;
 
-                driver.Navigate().GoToUrl("https://mail.google.com/mail/u/0/#inbox");
-                Thread.Sleep(2000);
-                cookies = driver.Manage().Cookies.AllCookies;
-                foreach (var cookie in cookies)
+                    var cookies = driver.Manage().Cookies.AllCookies;
+                    foreach (var cookie in cookies)
+                    {
+                        cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
+                    }
+
+                    driver.Navigate().GoToUrl("https://mail.google.com/mail/u/0/#inbox");
+                    Thread.Sleep(2000);
+                    cookies = driver.Manage().Cookies.AllCookies;
+                    foreach (var cookie in cookies)
+                    {
+                        cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
+                    }
+
+                    driver.Navigate().GoToUrl("https://docs.google.com/document/u/0/");
+                    Thread.Sleep(2000);
+                    cookies = driver.Manage().Cookies.AllCookies;
+                    foreach (var cookie in cookies)
+                    {
+                        cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
+                    }
+
+                    response.Cookie = cookieString;
+                }
+                else
                 {
-                    cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
+                    response.Status = false;
+                    response.Detail_Reason = "Kênh không tồn tại";
                 }
-
-                driver.Navigate().GoToUrl("https://docs.google.com/document/u/0/");
-                Thread.Sleep(2000);
-                cookies = driver.Manage().Cookies.AllCookies;
-                foreach (var cookie in cookies)
-                {
-                    cookieString += string.Format("{0};{1};{2};{3};{4}\n", cookie.Name, cookie.Value, cookie.Domain, cookie.Path, cookie.Expiry);
-                }
-
-                response.Cookie = cookieString;
             }
             catch (Exception)
             {

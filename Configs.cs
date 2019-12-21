@@ -11,6 +11,8 @@ namespace MToolkit
         public int Page_Load { get; set; }
         public int Enter_Load { get; set; }
         public int Manual_Load { get; set; }
+        public string Manage_Site_Url { get; set; }
+        public int Action_Sleep { get; set; }
         public string Chrome_Path { get; set; }
     }
 }

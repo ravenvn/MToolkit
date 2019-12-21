@@ -36,15 +36,19 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.txtPageLoad = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnSaveConfig = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtEnterLoad = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtManualLoad = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtChromePath = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtManualLoad = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtEnterLoad = new System.Windows.Forms.TextBox();
+            this.btnSaveConfig = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtPageLoad = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtManageSiteUrl = new System.Windows.Forms.TextBox();
+            this.txtActionSleep = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -116,6 +120,10 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.txtActionSleep);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.txtManageSiteUrl);
+            this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.txtChromePath);
             this.tabPage2.Controls.Add(this.label3);
@@ -133,47 +141,21 @@
             this.tabPage2.Text = "Cấu hình";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // txtPageLoad
+            // label4
             // 
-            this.txtPageLoad.Location = new System.Drawing.Point(249, 27);
-            this.txtPageLoad.Name = "txtPageLoad";
-            this.txtPageLoad.Size = new System.Drawing.Size(106, 26);
-            this.txtPageLoad.TabIndex = 0;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(23, 126);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(222, 20);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Thư mục chứa file Chrome.exe";
             // 
-            // label1
+            // txtChromePath
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(220, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Thời gian tối đa tải trang (giây)";
-            // 
-            // btnSaveConfig
-            // 
-            this.btnSaveConfig.Location = new System.Drawing.Point(391, 219);
-            this.btnSaveConfig.Name = "btnSaveConfig";
-            this.btnSaveConfig.Size = new System.Drawing.Size(150, 60);
-            this.btnSaveConfig.TabIndex = 2;
-            this.btnSaveConfig.Text = "Lưu cấu hình";
-            this.btnSaveConfig.UseVisualStyleBackColor = true;
-            this.btnSaveConfig.Click += new System.EventHandler(this.BtnSaveConfig_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(412, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(329, 20);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Thời gian chờ tối đa sau khi nhấn Enter  (giây)";
-            // 
-            // txtEnterLoad
-            // 
-            this.txtEnterLoad.Location = new System.Drawing.Point(747, 25);
-            this.txtEnterLoad.Name = "txtEnterLoad";
-            this.txtEnterLoad.Size = new System.Drawing.Size(106, 26);
-            this.txtEnterLoad.TabIndex = 3;
+            this.txtChromePath.Location = new System.Drawing.Point(264, 123);
+            this.txtChromePath.Name = "txtChromePath";
+            this.txtChromePath.Size = new System.Drawing.Size(589, 26);
+            this.txtChromePath.TabIndex = 7;
             // 
             // label3
             // 
@@ -191,21 +173,79 @@
             this.txtManualLoad.Size = new System.Drawing.Size(106, 26);
             this.txtManualLoad.TabIndex = 5;
             // 
-            // label4
+            // label2
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 126);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(222, 20);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Thư mục chứa file Chrome.exe";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(412, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(329, 20);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Thời gian chờ tối đa sau khi nhấn Enter  (giây)";
             // 
-            // txtChromePath
+            // txtEnterLoad
             // 
-            this.txtChromePath.Location = new System.Drawing.Point(264, 123);
-            this.txtChromePath.Name = "txtChromePath";
-            this.txtChromePath.Size = new System.Drawing.Size(589, 26);
-            this.txtChromePath.TabIndex = 7;
+            this.txtEnterLoad.Location = new System.Drawing.Point(747, 25);
+            this.txtEnterLoad.Name = "txtEnterLoad";
+            this.txtEnterLoad.Size = new System.Drawing.Size(106, 26);
+            this.txtEnterLoad.TabIndex = 3;
+            // 
+            // btnSaveConfig
+            // 
+            this.btnSaveConfig.Location = new System.Drawing.Point(477, 350);
+            this.btnSaveConfig.Name = "btnSaveConfig";
+            this.btnSaveConfig.Size = new System.Drawing.Size(150, 60);
+            this.btnSaveConfig.TabIndex = 2;
+            this.btnSaveConfig.Text = "Lưu cấu hình";
+            this.btnSaveConfig.UseVisualStyleBackColor = true;
+            this.btnSaveConfig.Click += new System.EventHandler(this.BtnSaveConfig_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(23, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(220, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Thời gian tối đa tải trang (giây)";
+            // 
+            // txtPageLoad
+            // 
+            this.txtPageLoad.Location = new System.Drawing.Point(249, 27);
+            this.txtPageLoad.Name = "txtPageLoad";
+            this.txtPageLoad.Size = new System.Drawing.Size(106, 26);
+            this.txtPageLoad.TabIndex = 0;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(23, 187);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(137, 20);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "URL trang quản lý";
+            // 
+            // txtManageSiteUrl
+            // 
+            this.txtManageSiteUrl.Location = new System.Drawing.Point(176, 184);
+            this.txtManageSiteUrl.Name = "txtManageSiteUrl";
+            this.txtManageSiteUrl.Size = new System.Drawing.Size(347, 26);
+            this.txtManageSiteUrl.TabIndex = 10;
+            // 
+            // txtActionSleep
+            // 
+            this.txtActionSleep.Location = new System.Drawing.Point(487, 244);
+            this.txtActionSleep.Name = "txtActionSleep";
+            this.txtActionSleep.Size = new System.Drawing.Size(107, 26);
+            this.txtActionSleep.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(23, 247);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(458, 20);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Thời gian nghỉ sau mỗi hành động click button, nhập text... (giây)";
             // 
             // Form1
             // 
@@ -246,6 +286,10 @@
         private System.Windows.Forms.TextBox txtManualLoad;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtChromePath;
+        private System.Windows.Forms.TextBox txtManageSiteUrl;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtActionSleep;
+        private System.Windows.Forms.Label label6;
     }
 }
 
