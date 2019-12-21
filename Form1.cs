@@ -30,12 +30,12 @@ namespace MToolkit
 
         private void LoadConfigs()
         {
-            txtPageLoad.Text = loginHelper.config.Page_Load.ToString();
-            txtEnterLoad.Text = loginHelper.config.Enter_Load.ToString();
-            txtManualLoad.Text = loginHelper.config.Manual_Load.ToString();
-            txtChromePath.Text = loginHelper.config.Chrome_Path;
-            txtManageSiteUrl.Text = loginHelper.config.Manage_Site_Url;
-            txtActionSleep.Text = loginHelper.config.Action_Sleep.ToString();
+            txtPageLoad.Text = Helper.config.Page_Load.ToString();
+            chbLogError.Checked = Helper.config.Log_Error != 0;
+            txtEnterLoad.Text = Helper.config.Enter_Load.ToString();
+            txtManualLoad.Text = Helper.config.Manual_Load.ToString();
+            txtManageSiteUrl.Text = Helper.config.Manage_Site_Url;
+            txtActionSleep.Text = Helper.config.Action_Sleep.ToString();
         }
 
         private void BtnStart_Click(object sender, EventArgs e)
@@ -116,13 +116,13 @@ namespace MToolkit
 
         private void BtnSaveConfig_Click(object sender, EventArgs e)
         {
-            loginHelper.config.Page_Load = Int32.Parse(txtPageLoad.Text);
-            loginHelper.config.Enter_Load = Int32.Parse(txtPageLoad.Text);
-            loginHelper.config.Manual_Load = Int32.Parse(txtManualLoad.Text);
-            loginHelper.config.Manage_Site_Url = txtManageSiteUrl.Text.Trim();
-            loginHelper.config.Action_Sleep = Int32.Parse(txtActionSleep.Text);
-            loginHelper.config.Chrome_Path = txtChromePath.Text.Trim();
-            var configJson = JsonConvert.SerializeObject(loginHelper.config);
+            Helper.config.Page_Load = Int32.Parse(txtPageLoad.Text);
+            Helper.config.Enter_Load = Int32.Parse(txtPageLoad.Text);
+            Helper.config.Log_Error = chbLogError.Checked ? 1 : 0;
+            Helper.config.Manual_Load = Int32.Parse(txtManualLoad.Text);
+            Helper.config.Manage_Site_Url = txtManageSiteUrl.Text.Trim();
+            Helper.config.Action_Sleep = Int32.Parse(txtActionSleep.Text);
+            var configJson = JsonConvert.SerializeObject(Helper.config);
             var jsonFormatted = JValue.Parse(configJson).ToString(Formatting.Indented);
 
             File.WriteAllText("Configs.json", jsonFormatted);

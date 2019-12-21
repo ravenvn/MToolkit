@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Newtonsoft.Json;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
@@ -14,6 +15,7 @@ namespace MToolkit.Helpers
 {
     class Helper
     {
+        public static Configs config = JsonConvert.DeserializeObject<Configs>(File.ReadAllText("Configs.json"));
         public static string tempDir = "";
         public static string profileDir = "";
         public static FirefoxDriver CreateFirefoxDriver(string profile, string proxy = "", string userAgent = "")

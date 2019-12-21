@@ -36,8 +36,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtChromePath = new System.Windows.Forms.TextBox();
+            this.txtActionSleep = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtManageSiteUrl = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtManualLoad = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -45,10 +47,7 @@
             this.btnSaveConfig = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtPageLoad = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtManageSiteUrl = new System.Windows.Forms.TextBox();
-            this.txtActionSleep = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.chbLogError = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -120,12 +119,11 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.chbLogError);
             this.tabPage2.Controls.Add(this.txtActionSleep);
             this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.txtManageSiteUrl);
             this.tabPage2.Controls.Add(this.label5);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.txtChromePath);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.txtManualLoad);
             this.tabPage2.Controls.Add(this.label2);
@@ -141,21 +139,37 @@
             this.tabPage2.Text = "Cấu hình";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label4
+            // txtActionSleep
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 126);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(222, 20);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Thư mục chứa file Chrome.exe";
+            this.txtActionSleep.Location = new System.Drawing.Point(487, 181);
+            this.txtActionSleep.Name = "txtActionSleep";
+            this.txtActionSleep.Size = new System.Drawing.Size(107, 26);
+            this.txtActionSleep.TabIndex = 12;
             // 
-            // txtChromePath
+            // label6
             // 
-            this.txtChromePath.Location = new System.Drawing.Point(264, 123);
-            this.txtChromePath.Name = "txtChromePath";
-            this.txtChromePath.Size = new System.Drawing.Size(589, 26);
-            this.txtChromePath.TabIndex = 7;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(23, 184);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(458, 20);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Thời gian nghỉ sau mỗi hành động click button, nhập text... (giây)";
+            // 
+            // txtManageSiteUrl
+            // 
+            this.txtManageSiteUrl.Location = new System.Drawing.Point(176, 121);
+            this.txtManageSiteUrl.Name = "txtManageSiteUrl";
+            this.txtManageSiteUrl.Size = new System.Drawing.Size(347, 26);
+            this.txtManageSiteUrl.TabIndex = 10;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(23, 124);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(137, 20);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "URL trang quản lý";
             // 
             // label3
             // 
@@ -215,37 +229,15 @@
             this.txtPageLoad.Size = new System.Drawing.Size(106, 26);
             this.txtPageLoad.TabIndex = 0;
             // 
-            // label5
+            // chbLogError
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(23, 187);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(137, 20);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "URL trang quản lý";
-            // 
-            // txtManageSiteUrl
-            // 
-            this.txtManageSiteUrl.Location = new System.Drawing.Point(176, 184);
-            this.txtManageSiteUrl.Name = "txtManageSiteUrl";
-            this.txtManageSiteUrl.Size = new System.Drawing.Size(347, 26);
-            this.txtManageSiteUrl.TabIndex = 10;
-            // 
-            // txtActionSleep
-            // 
-            this.txtActionSleep.Location = new System.Drawing.Point(487, 244);
-            this.txtActionSleep.Name = "txtActionSleep";
-            this.txtActionSleep.Size = new System.Drawing.Size(107, 26);
-            this.txtActionSleep.TabIndex = 12;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(23, 247);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(458, 20);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "Thời gian nghỉ sau mỗi hành động click button, nhập text... (giây)";
+            this.chbLogError.AutoSize = true;
+            this.chbLogError.Location = new System.Drawing.Point(27, 247);
+            this.chbLogError.Name = "chbLogError";
+            this.chbLogError.Size = new System.Drawing.Size(132, 24);
+            this.chbLogError.TabIndex = 13;
+            this.chbLogError.Text = "Ghi lỗi vào file";
+            this.chbLogError.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -284,12 +276,11 @@
         private System.Windows.Forms.TextBox txtEnterLoad;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtManualLoad;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtChromePath;
         private System.Windows.Forms.TextBox txtManageSiteUrl;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtActionSleep;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox chbLogError;
     }
 }
 

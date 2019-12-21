@@ -19,7 +19,6 @@ namespace MToolkit.Helpers
 {
     class ViewHelper
     {
-        public Configs config = JsonConvert.DeserializeObject<Configs>(File.ReadAllText("Configs.json"));
         private bool stopThread = false;
         private static readonly HttpClient client = new HttpClient();
 
@@ -76,7 +75,7 @@ namespace MToolkit.Helpers
                         }
                         catch (Exception e)
                         {
-                            Helper.LogError("View_Errors", e.Message);
+                            if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
                         }
 
                         // check continue running or not
@@ -90,7 +89,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
             }
         }
 
@@ -107,11 +106,11 @@ namespace MToolkit.Helpers
                     
                     var searchElement = driver.FindElementByXPath("//input[@id='search']");
                     searchElement.SendKeys(title);
-                    Thread.Sleep(config.Action_Sleep);
+                    Thread.Sleep(Helper.config.Action_Sleep);
                     searchElement.SendKeys(Keys.Enter);
-                    Thread.Sleep(config.Action_Sleep);
+                    Thread.Sleep(Helper.config.Action_Sleep);
                     driver.Navigate().GoToUrl(driver.Url + "&sp=" + filterType);
-                    Thread.Sleep(config.Action_Sleep);
+                    Thread.Sleep(Helper.config.Action_Sleep);
 
                     var videoElement = driver.FindElementsById("video-title").Where(x => x.Displayed && x.GetAttribute("href") != null && x.GetAttribute("href").Contains(videoId)).First();
                     if (videoElement != null)
@@ -129,7 +128,7 @@ namespace MToolkit.Helpers
                                 if (subscribeButton != null)
                                 {
                                     subscribeButton.Click();
-                                    Thread.Sleep(config.Action_Sleep);
+                                    Thread.Sleep(Helper.config.Action_Sleep);
                                     var unsubModal = driver.FindElementsByXPath("//div[@id='scrollable']/yt-formatted-string[@class='line-text style-scope yt-confirm-dialog-renderer']").Where(x => x.Displayed).First();
                                     if (unsubModal != null)
                                     {
@@ -152,7 +151,7 @@ namespace MToolkit.Helpers
                             }
                             catch (Exception e)
                             {
-                                Helper.LogError("View_Errors", e.Message);
+                                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
                             }
                         }
 
@@ -162,7 +161,7 @@ namespace MToolkit.Helpers
                             if (likeButton != null)
                             {
                                 likeButton.Click();
-                                Thread.Sleep(config.Action_Sleep);
+                                Thread.Sleep(Helper.config.Action_Sleep);
                             }
                         }
 
@@ -204,11 +203,11 @@ namespace MToolkit.Helpers
                     { "duration", duration.ToString() }
                 };
                 var content = new FormUrlEncodedContent(values);
-                client.PostAsync(config.Manage_Site_Url + "/api/videos/update-duration", content);
+                client.PostAsync(Helper.config.Manage_Site_Url + "/api/videos/update-duration", content);
             }
             catch (Exception e)
             {
-                Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
             }
         }
 
@@ -223,11 +222,11 @@ namespace MToolkit.Helpers
                     { "video_id", videoId }
                 };
                 var content = new FormUrlEncodedContent(values);
-                client.PostAsync(config.Manage_Site_Url + "/api/channels/increase-sub", content);
+                client.PostAsync(Helper.config.Manage_Site_Url + "/api/channels/increase-sub", content);
             }
             catch (Exception e)
             {
-                Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
             }
         }
         
@@ -241,11 +240,11 @@ namespace MToolkit.Helpers
                     { "error", error }
                 };
                 var content = new FormUrlEncodedContent(values);
-                client.PostAsync(config.Manage_Site_Url + "/api/account/report-error", content);
+                client.PostAsync(Helper.config.Manage_Site_Url + "/api/account/report-error", content);
             }
             catch (Exception e)
             {
-                Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
             }
         }
 
@@ -283,7 +282,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
             }
 
         }
@@ -318,7 +317,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
             }
         }
         private void CreateProxyExtension(string proxyAddress, string proxyPort, string proxyUsername, string proxyPassword)

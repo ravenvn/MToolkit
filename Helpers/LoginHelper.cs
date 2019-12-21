@@ -15,8 +15,6 @@ namespace MToolkit.Helpers
 {
     class LoginHelper
     {
-        public Configs config = JsonConvert.DeserializeObject<Configs>(File.ReadAllText("Configs.json"));
-
         public string Login(string profile, string email, string password, string recoveryEmail)
         {
             var response = new LoginResponse
@@ -39,12 +37,12 @@ namespace MToolkit.Helpers
             {
                 driver.Navigate().GoToUrl("https://accounts.google.com/signin/v2/identifier");
 
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Page_Load));
                 try
                 {
                     var mailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("identifierId")));
                     mailInput.SendKeys(email);
-                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     mailInput.SendKeys(Keys.Enter);
                 }
                 catch (Exception)
@@ -57,10 +55,10 @@ namespace MToolkit.Helpers
 
                 try
                 {
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
                     var passwordInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
                     passwordInput.SendKeys(password);
-                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     passwordInput.SendKeys(Keys.Enter);
                 }
                 catch (Exception)
@@ -73,7 +71,7 @@ namespace MToolkit.Helpers
 
                 try
                 {
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
                     wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.Name("password")));
                 }
                 catch (Exception)
@@ -86,7 +84,7 @@ namespace MToolkit.Helpers
 
                 try
                 {
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
                     wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("vxx8jf")));
                     var confirmOptionButtons = driver.FindElementsByClassName("vxx8jf").Where(x => x.Displayed).ToArray();
                     var numOptions = confirmOptionButtons.Length;
@@ -97,14 +95,14 @@ namespace MToolkit.Helpers
 
                         try
                         {
-                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
                             var recoveryMailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("knowledgePreregisteredEmailResponse")));
                             recoveryMailInput.SendKeys(recoveryEmail);
-                            Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
+                            Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                             recoveryMailInput.SendKeys(Keys.Enter);
                             try
                             {
-                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
                                 wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.Name("knowledgePreregisteredEmailResponse")));
                                 response.Status = true;
                             }
@@ -167,12 +165,12 @@ namespace MToolkit.Helpers
             {
                 driver.Navigate().GoToUrl("https://accounts.google.com/signin/v2/identifier");
 
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Page_Load));
                 try
                 {
                     var mailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("identifierId")));
                     mailInput.SendKeys(email);
-                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     mailInput.SendKeys(Keys.Enter);
                 }
                 catch (Exception)
@@ -185,7 +183,7 @@ namespace MToolkit.Helpers
 
                 try
                 {
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
                     var passwordInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
                     passwordInput.SendKeys(password);
                     passwordInput.SendKeys(Keys.Enter);
@@ -200,7 +198,7 @@ namespace MToolkit.Helpers
 
                 try
                 {
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
                     wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.Name("password")));
                 }
                 catch (Exception)
@@ -214,7 +212,7 @@ namespace MToolkit.Helpers
                 try
                 {
                     // Manual tasks
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Manual_Load));
+                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Manual_Load));
                     wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
                     var loginCookies = driver.Manage().Cookies.AllCookies;
                     var cookie = string.Empty;
@@ -314,7 +312,7 @@ namespace MToolkit.Helpers
             {
                 var cookieString = string.Empty;
                 driver.Navigate().GoToUrl("https://studio.youtube.com/channel/");
-                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Page_Load));
                 var avatarBtn = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
                 if (driver.Url.Contains("https://studio.youtube.com/channel/"))
                 {
@@ -328,7 +326,7 @@ namespace MToolkit.Helpers
                     }
 
                     driver.Navigate().GoToUrl("https://mail.google.com/mail/u/0/#inbox");
-                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     cookies = driver.Manage().Cookies.AllCookies;
                     foreach (var cookie in cookies)
                     {
@@ -336,7 +334,7 @@ namespace MToolkit.Helpers
                     }
 
                     driver.Navigate().GoToUrl("https://docs.google.com/document/u/0/");
-                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     cookies = driver.Manage().Cookies.AllCookies;
                     foreach (var cookie in cookies)
                     {
