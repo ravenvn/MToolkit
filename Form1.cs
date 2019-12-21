@@ -59,11 +59,16 @@ namespace MToolkit
             switch (request.Url.AbsolutePath)
             {
                 case "/login-gmail":
-                    return loginHelper.Login(request.QueryString["email"], request.QueryString["password"], request.QueryString["recovery_email"]);
+                    return loginHelper.Login(
+                        request.QueryString["profile"],
+                        request.QueryString["email"],
+                        request.QueryString["password"],
+                        request.QueryString["recovery_email"]
+                    );
                 case "/manual-login":
-                    return loginHelper.ManualLogin(request.QueryString["email"], request.QueryString["password"]);
-                case "/login-by-cookie":
-                    return loginHelper.LoginByCookie(request.QueryString["cookie"]);
+                    return loginHelper.ManualLogin(request.QueryString["profile"], request.QueryString["email"], request.QueryString["password"]);
+                //case "/login-by-cookie":
+                //    return loginHelper.LoginByCookie(request.QueryString["cookie"]);
                 case "/bots/auto-view":
                     var accounts = JsonConvert.DeserializeObject<Account[]>(request.QueryString["accounts"]);
                     var data = new ViewData

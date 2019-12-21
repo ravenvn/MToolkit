@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
@@ -17,7 +17,7 @@ namespace MToolkit.Helpers
     {
         public Configs config = JsonConvert.DeserializeObject<Configs>(File.ReadAllText("Configs.json"));
 
-        public string Login(string email, string password, string recoveryEmail)
+        public string Login(string profile, string email, string password, string recoveryEmail)
         {
             var response = new LoginResponse
             {
@@ -28,18 +28,15 @@ namespace MToolkit.Helpers
                 Channel_Link = string.Empty
             };
 
-            ChromeDriver driver = null;
+            var driver = Helper.CreateFirefoxDriver(profile);
+            if (driver == null)
+            {
+                response.Detail_Reason = "Không load được profile";
+                return JsonConvert.SerializeObject(response);
+            }
+
             try
             {
-                var service = ChromeDriverService.CreateDefaultService();
-                service.HideCommandPromptWindow = true;
-                var options = new ChromeOptions();
-                options.BinaryLocation = config.Chrome_Path;
-                options.AddArguments("disable-infobars");
-                options.AddArguments("start-maximized");
-                options.AddArguments("--incognito");
-
-                driver = new ChromeDriver(service, options);
                 driver.Navigate().GoToUrl("https://accounts.google.com/signin/v2/identifier");
 
                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
@@ -47,18 +44,14 @@ namespace MToolkit.Helpers
                 {
                     var mailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("identifierId")));
                     mailInput.SendKeys(email);
+                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
                     mailInput.SendKeys(Keys.Enter);
                 }
                 catch (Exception)
                 {
                     response.Detail_Reason = "Mạng lỗi";
-
-                    if (driver != null)
-                    {
-                        driver.Close();
-                        driver.Quit();
-                    }
-
+                    Helper.CloseBrowser(driver);
+                    
                     return JsonConvert.SerializeObject(response);
                 }
 
@@ -67,17 +60,13 @@ namespace MToolkit.Helpers
                     wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
                     var passwordInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
                     passwordInput.SendKeys(password);
+                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
                     passwordInput.SendKeys(Keys.Enter);
                 }
                 catch (Exception)
                 {
                     response.Detail_Reason = "Tài khoản không tồn tại";
-
-                    if (driver != null)
-                    {
-                        driver.Close();
-                        driver.Quit();
-                    }
+                    Helper.CloseBrowser(driver);
 
                     return JsonConvert.SerializeObject(response);
                 }
@@ -90,12 +79,7 @@ namespace MToolkit.Helpers
                 catch (Exception)
                 {
                     response.Detail_Reason = "Sai mật khẩu";
-
-                    if (driver != null)
-                    {
-                        driver.Close();
-                        driver.Quit();
-                    }
+                    Helper.CloseBrowser(driver);
 
                     return JsonConvert.SerializeObject(response);
                 }
@@ -116,6 +100,7 @@ namespace MToolkit.Helpers
                             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Enter_Load));
                             var recoveryMailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("knowledgePreregisteredEmailResponse")));
                             recoveryMailInput.SendKeys(recoveryEmail);
+                            Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
                             recoveryMailInput.SendKeys(Keys.Enter);
                             try
                             {
@@ -126,12 +111,7 @@ namespace MToolkit.Helpers
                             catch (Exception)
                             {
                                 response.Detail_Reason = "Sai email khôi phục";
-
-                                if (driver != null)
-                                {
-                                    driver.Close();
-                                    driver.Quit();
-                                }
+                                Helper.CloseBrowser(driver);
 
                                 return JsonConvert.SerializeObject(response);
                             }
@@ -139,12 +119,7 @@ namespace MToolkit.Helpers
                         catch (Exception)
                         {
                             response.Detail_Reason = "Không hỗ trợ xác nhận bằng email khôi phục";
-
-                            if (driver != null)
-                            {
-                                driver.Close();
-                                driver.Quit();
-                            }
+                            Helper.CloseBrowser(driver);
 
                             return JsonConvert.SerializeObject(response);
                         }
@@ -164,17 +139,13 @@ namespace MToolkit.Helpers
             {
                 GetCookie(driver, ref response);
             }
+            Helper.CloseBrowser(driver, true);
 
-            if (driver != null)
-            {
-                driver.Close();
-                driver.Quit();
-            }
 
             return JsonConvert.SerializeObject(response);
         }
 
-        public string ManualLogin(string email, string password)
+        public string ManualLogin(string profile, string email, string password)
         {
             var response = new LoginResponse
             {
@@ -185,19 +156,15 @@ namespace MToolkit.Helpers
                 Channel_Link = string.Empty
             };
 
-            ChromeDriver driver = null;
+            var driver = Helper.CreateFirefoxDriver(profile);
+            if (driver == null)
+            {
+                response.Detail_Reason = "Không load được profile";
+                return JsonConvert.SerializeObject(response);
+            }
+
             try
             {
-                var service = ChromeDriverService.CreateDefaultService();
-                service.HideCommandPromptWindow = true;
-                var options = new ChromeOptions();
-                options.BinaryLocation = config.Chrome_Path;
-                options.AddArguments("disable-infobars");
-                options.AddArguments("start-maximized");
-                options.AddArguments("--incognito");
-
-
-                driver = new ChromeDriver(service, options);
                 driver.Navigate().GoToUrl("https://accounts.google.com/signin/v2/identifier");
 
                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
@@ -205,17 +172,13 @@ namespace MToolkit.Helpers
                 {
                     var mailInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("identifierId")));
                     mailInput.SendKeys(email);
+                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
                     mailInput.SendKeys(Keys.Enter);
                 }
                 catch (Exception)
                 {
                     response.Detail_Reason = "Mạng lỗi";
-
-                    if (driver != null)
-                    {
-                        driver.Close();
-                        driver.Quit();
-                    }
+                    Helper.CloseBrowser(driver);
 
                     return JsonConvert.SerializeObject(response);
                 }
@@ -230,12 +193,7 @@ namespace MToolkit.Helpers
                 catch (Exception)
                 {
                     response.Detail_Reason = "Tài khoản không tồn tại";
-
-                    if (driver != null)
-                    {
-                        driver.Close();
-                        driver.Quit();
-                    }
+                    Helper.CloseBrowser(driver);
 
                     return JsonConvert.SerializeObject(response);
                 }
@@ -248,12 +206,7 @@ namespace MToolkit.Helpers
                 catch (Exception)
                 {
                     response.Detail_Reason = "Sai mật khẩu";
-
-                    if (driver != null)
-                    {
-                        driver.Close();
-                        driver.Quit();
-                    }
+                    Helper.CloseBrowser(driver);
 
                     return JsonConvert.SerializeObject(response);
                 }
@@ -287,79 +240,75 @@ namespace MToolkit.Helpers
                 GetCookie(driver, ref response);
             }
 
-            if (driver != null)
-            {
-                driver.Close();
-                driver.Quit();
-            }
+            Helper.CloseBrowser(driver, true);
 
             return JsonConvert.SerializeObject(response);
         }
 
-        public string LoginByCookie(string cookieString)
-        {
-            var response = new LoginResponse
-            {
-                Status = false,
-                Detail_Reason = string.Empty,
-                Cookie = cookieString
-            };
+        //public string LoginByCookie(string cookieString)
+        //{
+        //    var response = new LoginResponse
+        //    {
+        //        Status = false,
+        //        Detail_Reason = string.Empty,
+        //        Cookie = cookieString
+        //    };
 
-            ChromeDriver driver = null;
-            try
-            {
-                var service = ChromeDriverService.CreateDefaultService();
-                service.HideCommandPromptWindow = true;
-                var options = new ChromeOptions();
-                options.BinaryLocation = config.Chrome_Path;
-                options.AddArguments("disable-infobars");
-                options.AddArguments("start-maximized");
-                options.AddArguments("--incognito");
+        //    ChromeDriver driver = null;
+        //    try
+        //    {
+        //        var service = ChromeDriverService.CreateDefaultService();
+        //        service.HideCommandPromptWindow = true;
+        //        var options = new ChromeOptions();
+        //        options.BinaryLocation = config.Chrome_Path;
+        //        options.AddArguments("disable-infobars");
+        //        options.AddArguments("start-maximized");
+        //        options.AddArguments("--incognito");
 
 
-                driver = new ChromeDriver(service, options);
-                driver.Navigate().GoToUrl("https://www.youtube.com");
-                var cookies = cookieString.Split('\n');
-                foreach (var cookie in cookies)
-                {
-                    var item = cookie.Split(';');
-                    DateTime? expiry = null;
-                    try
-                    {
-                        expiry = DateTime.Parse(item[4]);
-                    }
-                    catch (Exception) { }
-                    var c = new Cookie(item[0], item[1], item[2], item[3], expiry);
-                    driver.Manage().Cookies.AddCookie(c);
-                }
-                driver.Navigate().Refresh();
+        //        driver = new ChromeDriver(service, options);
+        //        driver.Navigate().GoToUrl("https://www.youtube.com");
+        //        var cookies = cookieString.Split('\n');
+        //        foreach (var cookie in cookies)
+        //        {
+        //            var item = cookie.Split(';');
+        //            DateTime? expiry = null;
+        //            try
+        //            {
+        //                expiry = DateTime.Parse(item[4]);
+        //            }
+        //            catch (Exception) { }
+        //            var c = new Cookie(item[0], item[1], item[2], item[3], expiry);
+        //            driver.Manage().Cookies.AddCookie(c);
+        //        }
+        //        driver.Navigate().Refresh();
 
-                try
-                {
-                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
-                    wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
-                    response.Status = true;
-                }
-                catch (Exception)
-                {
-                    response.Detail_Reason = "Cookie hết hạn";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Detail_Reason = ex.Message;
-            }
-            
-            if (response.Status == false && driver != null)
-            {
-                driver.Close();
-                driver.Quit();
-            }
+        //        try
+        //        {
+        //            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(config.Page_Load));
+        //            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("avatar-btn")));
+        //            response.Status = true;
+        //        }
+        //        catch (Exception)
+        //        {
+        //            response.Detail_Reason = "Cookie hết hạn";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Detail_Reason = ex.Message;
+        //    }
 
-            return JsonConvert.SerializeObject(response);
-        }
+        //    if (response.Status == false && driver != null)
+        //    {
+        //        driver.Close();
+        //        driver.Quit();
+        //    }
 
-        private void GetCookie(ChromeDriver driver, ref LoginResponse response)
+        //    return JsonConvert.SerializeObject(response);
+        //}
+
+        private void GetCookie(FirefoxDriver driver, ref LoginResponse response)
         {
             try
             {
@@ -379,7 +328,7 @@ namespace MToolkit.Helpers
                     }
 
                     driver.Navigate().GoToUrl("https://mail.google.com/mail/u/0/#inbox");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
                     cookies = driver.Manage().Cookies.AllCookies;
                     foreach (var cookie in cookies)
                     {
@@ -387,7 +336,7 @@ namespace MToolkit.Helpers
                     }
 
                     driver.Navigate().GoToUrl("https://docs.google.com/document/u/0/");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(TimeSpan.FromSeconds(config.Action_Sleep));
                     cookies = driver.Manage().Cookies.AllCookies;
                     foreach (var cookie in cookies)
                     {

@@ -25,85 +25,7 @@ namespace MToolkit.Helpers
 
         public void Test()
         {
-            var driver = CreateFirefoxDriver(@"C:\Users\Mickey\AppData\Roaming\Mozilla\Firefox\Profiles\0iheofyh.Profile1", "193.27.10.153:80|wrletwth-25|er0kx7ty42vw1", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/8.1.2 Mobile/16A366 Safari/605.1.15");
-            if (driver != null)
-            {
-                driver.Navigate().GoToUrl("https://www.google.com/search?q=my+user+agent&oq=my+user+agent&aqs=chrome..69i57j69i59j0l5j69i60.4180j0j4&sourceid=chrome&ie=UTF-8");
-                Thread.Sleep(5);
-                driver.Navigate().GoToUrl("https://www.google.com/search?q=my+ip&oq=my+ip&aqs=chrome..69i57j0l4j69i60l3.8205j0j9&sourceid=chrome&ie=UTF-8");
-                Thread.Sleep(5);
-                driver.Close();
-                driver.Quit();
-            }
-
-            driver = CreateFirefoxDriver(@"C:\Users\Mickey\AppData\Roaming\Mozilla\Firefox\Profiles\okxw9gv6.Profile2", "84.21.191.1933:80|wrletwth-23|er0kx7ty42vw", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0");
-            if (driver != null)
-            {
-                driver.Navigate().GoToUrl("https://www.google.com/search?q=my+user+agent&oq=my+user+agent&aqs=chrome..69i57j69i59j0l5j69i60.4180j0j4&sourceid=chrome&ie=UTF-8");
-                Thread.Sleep(5);
-                driver.Navigate().GoToUrl("https://www.google.com/search?q=my+ip&oq=my+ip&aqs=chrome..69i57j0l4j69i60l3.8205j0j9&sourceid=chrome&ie=UTF-8");
-                Thread.Sleep(5);
-                driver.Close();
-                driver.Quit();
-            }
-        }
-
-        private FirefoxDriver CreateFirefoxDriver(string profile, string proxy, string userAgent)
-        {
-            FirefoxDriver driver = null;
-            try
-            {
-                var proxyAuth = proxy.Split('|');
-                var proxyAddress = proxyAuth[0];
-                var proxyUsername = proxyAuth[1];
-                var proxyPassword = proxyAuth[2];
-
-                var firefoxProfile = new FirefoxProfile(profile);
-                firefoxProfile.SetPreference("general.useragent.override", userAgent);
-                var service = FirefoxDriverService.CreateDefaultService();
-                service.HideCommandPromptWindow = true;
-
-                var firefoxProxy = new Proxy();
-                firefoxProxy.HttpProxy = firefoxProxy.FtpProxy = firefoxProxy.SslProxy = proxyAddress;
-                firefoxProxy.Kind = ProxyKind.Manual;
-
-                var options = new FirefoxOptions();
-                options.Profile = firefoxProfile;
-                options.Proxy = firefoxProxy;
-
-                driver = new FirefoxDriver(service, options);
-                driver.Navigate().GoToUrl("https://google.com");
-                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-                wait.Until(ExpectedConditions.AlertIsPresent());
-                var alert = driver.SwitchTo().Alert();
-                alert.SendKeys(proxyUsername + Keys.Tab + proxyPassword);
-                alert.Accept();
-                Thread.Sleep(1);
-                try
-                {
-                    // if alert is still present, it means the authentication fail, we quit the browser
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-                    wait.Until(ExpectedConditions.AlertIsPresent());
-                    // we don't use driver.Close() here because it is not working for proxy alert
-                    driver.Quit();
-                    driver = null;
-                }
-                catch (Exception)
-                {
-                    driver.Manage().Window.Maximize();
-                }
-            }
-            catch (Exception e)
-            {
-                LogError(e.Message);
-                if (driver != null)
-                {
-                    driver.Close();
-                    driver.Quit();
-                }
-            }
-
-            return driver;
+            
         }
 
         public string AutoView(ViewData data)
@@ -154,7 +76,7 @@ namespace MToolkit.Helpers
                         }
                         catch (Exception e)
                         {
-                            LogError(e.Message);
+                            Helper.LogError("View_Errors", e.Message);
                         }
 
                         // check continue running or not
@@ -168,7 +90,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                LogError(e.Message);
+                Helper.LogError("View_Errors", e.Message);
             }
         }
 
@@ -178,7 +100,7 @@ namespace MToolkit.Helpers
             try
             {
                 var random = new Random();
-                driver = CreateFirefoxDriver(account.Profile, account.Proxy, account.UserAgent);
+                driver = Helper.CreateFirefoxDriver(account.Profile, account.Proxy, account.UserAgent);
                 if (driver != null)
                 {
                     driver.Navigate().GoToUrl("https://youtube.com");
@@ -230,7 +152,7 @@ namespace MToolkit.Helpers
                             }
                             catch (Exception e)
                             {
-                                LogError(e.Message);
+                                Helper.LogError("View_Errors", e.Message);
                             }
                         }
 
@@ -286,7 +208,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                LogError(e.Message);
+                Helper.LogError("View_Errors", e.Message);
             }
         }
 
@@ -305,7 +227,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                LogError(e.Message);
+                Helper.LogError("View_Errors", e.Message);
             }
         }
         
@@ -323,36 +245,11 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                LogError(e.Message);
+                Helper.LogError("View_Errors", e.Message);
             }
         }
 
-        private void CopyFromTempToProfileDirectory(string temp, string profile)
-        {
-            var dataFiles = Directory.GetFiles(temp, "*.sqlite*");
-            foreach (var dataFile in dataFiles)
-            {
-                File.Copy(dataFile, profile + @"\" + Path.GetFileName(dataFile), true);
-            }
-
-            #region Copy all files and sub directory. It's caused error when reload profile
-            // Copy all files and sub directory. It's caused error  
-            ////Now Create all of the directories
-            //foreach (string dirPath in Directory.GetDirectories(temp, "*",
-            //    SearchOption.AllDirectories))
-            //    Directory.CreateDirectory(dirPath.Replace(temp, profile));
-
-            ////Copy all the files & Replaces any files with the same name
-            //foreach (string newPath in Directory.GetFiles(temp, "*.*",
-            //    SearchOption.AllDirectories).Where(x => !x.EndsWith(".lock")))
-            //    File.Copy(newPath, newPath.Replace(temp, profile), true);
-            #endregion
-        }
-
-        private void LogError(string error)
-        {
-            File.AppendAllText("View_Errors.txt", error + Environment.NewLine);
-        }
+        
 
         #region Draft
         private void CloseBrowser(IWebDriver driver, string profile = null)
@@ -386,7 +283,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                LogError(e.Message);
+                Helper.LogError("View_Errors", e.Message);
             }
 
         }
@@ -421,7 +318,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                LogError(e.Message);
+                Helper.LogError("View_Errors", e.Message);
             }
         }
         private void CreateProxyExtension(string proxyAddress, string proxyPort, string proxyUsername, string proxyPassword)
