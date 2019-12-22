@@ -57,10 +57,13 @@ namespace MToolkit.Helpers
                 var titleVideoIds = data.TitleVideoIds.Split('\n');
                 var i = 0;
                 var random = new Random();
+                var errorAccountIds = new List<int>();
+
                 while (true)
                 {
                     foreach (var account in data.Accounts)
                     {
+                        if (errorAccountIds.Contains(account.Id)) continue;
                         try
                         {
                             if (i == titleVideoIds.Length) i = 0;
@@ -70,7 +73,11 @@ namespace MToolkit.Helpers
                             var recommendedVideoId = titleVideoId[2];
                             var sub = data.Sub == false ? false : random.Next(1, 101) <= data.SubRatio;
                             var like = data.Like == false ? false : random.Next(1, 101) <= data.LikeRatio;
-                            AutoViewAccount(account, data.FilterType, title, videoId, recommendedVideoId, data.DurationMin, data.DurationMax, sub, like);
+                            var status = AutoViewAccount(account, data.FilterType, title, videoId, recommendedVideoId, data.DurationMin, data.DurationMax, sub, like);
+                            if (!status)
+                            {
+                                errorAccountIds.Add(account.Id);
+                            }
                             i += 1;
                         }
                         catch (Exception e)
@@ -81,7 +88,10 @@ namespace MToolkit.Helpers
                         // check continue running or not
                         if (stopThread) break;
                     }
-
+                    if (errorAccountIds.Count == data.Accounts.Length)
+                    {
+                        stopThread = true;
+                    }
                     if (stopThread) break;
                 }
                 
@@ -93,8 +103,9 @@ namespace MToolkit.Helpers
             }
         }
 
-        private void AutoViewAccount(Account account, string filterType, string title, string videoId, string recommendedVideoId, int durationMin, int durationMax, bool sub, bool like)
+        private bool AutoViewAccount(Account account, string filterType, string title, string videoId, string recommendedVideoId, int durationMin, int durationMax, bool sub, bool like)
         {
+            var status = false;
             FirefoxDriver driver = null;
             try
             {
@@ -103,21 +114,21 @@ namespace MToolkit.Helpers
                 if (driver != null)
                 {
                     driver.Navigate().GoToUrl("https://youtube.com");
-                    
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     var searchElement = driver.FindElementByXPath("//input[@id='search']");
                     searchElement.SendKeys(title);
-                    Thread.Sleep(Helper.config.Action_Sleep);
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     searchElement.SendKeys(Keys.Enter);
-                    Thread.Sleep(Helper.config.Action_Sleep);
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                     driver.Navigate().GoToUrl(driver.Url + "&sp=" + filterType);
-                    Thread.Sleep(Helper.config.Action_Sleep);
+                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
 
                     var videoElement = driver.FindElementsById("video-title").Where(x => x.Displayed && x.GetAttribute("href") != null && x.GetAttribute("href").Contains(videoId)).First();
                     if (videoElement != null)
                     {
                         videoElement.Click();
                         var duration = random.Next(durationMin, durationMax + 1);
-                        Thread.Sleep(duration);
+                        Thread.Sleep(TimeSpan.FromSeconds(duration));
                         UpdateDuration(videoId, duration);
                         // sub
                         if (sub)
@@ -128,7 +139,7 @@ namespace MToolkit.Helpers
                                 if (subscribeButton != null)
                                 {
                                     subscribeButton.Click();
-                                    Thread.Sleep(Helper.config.Action_Sleep);
+                                    Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                                     var unsubModal = driver.FindElementsByXPath("//div[@id='scrollable']/yt-formatted-string[@class='line-text style-scope yt-confirm-dialog-renderer']").Where(x => x.Displayed).First();
                                     if (unsubModal != null)
                                     {
@@ -161,7 +172,7 @@ namespace MToolkit.Helpers
                             if (likeButton != null)
                             {
                                 likeButton.Click();
-                                Thread.Sleep(Helper.config.Action_Sleep);
+                                Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
                             }
                         }
 
@@ -170,14 +181,23 @@ namespace MToolkit.Helpers
                         //js.ExecuteScript("document.getElementsById('thumbnail').setAttribute('href', 'abcdef')");
                         //var firstRightVideo = driver.FindElementsById("thumbnail").Where(x => x.Displayed && x.GetAttribute("href") != null).First();
                         //firstRightVideo.Click();
+                        status = true;
                     }
 
+                }
+                else
+                {
+                    ReportAccountError(account.Id, "Proxy bị lỗi");
                 }
             }
             catch (Exception e)
             {
                 ReportAccountError(account.Id, e.Message);
             }
+
+            Helper.CloseBrowser(driver, true);
+
+            return status;
         }
 
         public string StopAutoView()
@@ -247,8 +267,6 @@ namespace MToolkit.Helpers
                 if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
             }
         }
-
-        
 
         #region Draft
         private void CloseBrowser(IWebDriver driver, string profile = null)

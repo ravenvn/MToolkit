@@ -63,12 +63,12 @@ namespace MToolkit.Helpers
                                 {
                                     return;
                                 }
-
                                 var rstr = ctx.Request.HttpMethod == "GET" ? _responderMethod(ctx.Request) : string.Empty;
                                 var buf = Encoding.UTF8.GetBytes(rstr);
                                 ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
                                 ctx.Response.AddHeader("Access-Control-Allow-Headers", "*");
                                 ctx.Response.AddHeader("Access-Control-Allow-Methods", "GET");
+                                ctx.Response.ContentEncoding = Encoding.UTF8;
                                 ctx.Response.ContentLength64 = buf.Length;
                                 ctx.Response.OutputStream.Write(buf, 0, buf.Length);
                             }

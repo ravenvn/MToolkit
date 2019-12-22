@@ -20,6 +20,8 @@ namespace MToolkit.Helpers
         public static string profileDir = "";
         public static FirefoxDriver CreateFirefoxDriver(string profile, string proxy = "", string userAgent = "")
         {
+            proxy = "";
+            userAgent = "";
             FirefoxDriver driver = null;
             try
             {

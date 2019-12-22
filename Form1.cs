@@ -71,11 +71,13 @@ namespace MToolkit
                 //    return loginHelper.LoginByCookie(request.QueryString["cookie"]);
                 case "/bots/auto-view":
                     var accounts = JsonConvert.DeserializeObject<Account[]>(request.QueryString["accounts"]);
+                    byte[] bytes = Encoding.Default.GetBytes(request.QueryString["title_video_ids"]);
+                    var title_video_ids = Encoding.UTF8.GetString(bytes);
                     var data = new ViewData
                     {
                         Accounts = accounts,
                         FilterType = request.QueryString["filter_type"],
-                        TitleVideoIds = request.QueryString["title_video_ids"],
+                        TitleVideoIds = title_video_ids,
                         DurationMin = Int32.Parse(request.QueryString["duration_min"]),
                         DurationMax = Int32.Parse(request.QueryString["duration_max"]),
                         Sub = request.QueryString["sub"] == "1" ? true : false,
@@ -84,6 +86,8 @@ namespace MToolkit
                         LikeRatio = Int32.Parse(request.QueryString["like_ratio"])
                     };
                     return viewHelper.AutoView(data);
+                case "/bots/stop-auto-view":
+                    return viewHelper.StopAutoView();
                 default:
                     return string.Empty;
             }    

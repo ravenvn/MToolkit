@@ -36,6 +36,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chbLogError = new System.Windows.Forms.CheckBox();
             this.txtActionSleep = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txtManageSiteUrl = new System.Windows.Forms.TextBox();
@@ -47,7 +48,6 @@
             this.btnSaveConfig = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtPageLoad = new System.Windows.Forms.TextBox();
-            this.chbLogError = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -76,7 +76,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(852, 528);
+            this.linkLabel1.Location = new System.Drawing.Point(1009, 528);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(103, 20);
             this.linkLabel1.TabIndex = 2;
@@ -87,7 +87,7 @@
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(985, 528);
+            this.linkLabel2.Location = new System.Drawing.Point(843, 528);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(123, 20);
             this.linkLabel2.TabIndex = 3;
@@ -138,6 +138,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Cấu hình";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // chbLogError
+            // 
+            this.chbLogError.AutoSize = true;
+            this.chbLogError.Location = new System.Drawing.Point(27, 247);
+            this.chbLogError.Name = "chbLogError";
+            this.chbLogError.Size = new System.Drawing.Size(132, 24);
+            this.chbLogError.TabIndex = 13;
+            this.chbLogError.Text = "Ghi lỗi vào file";
+            this.chbLogError.UseVisualStyleBackColor = true;
             // 
             // txtActionSleep
             // 
@@ -228,16 +238,6 @@
             this.txtPageLoad.Name = "txtPageLoad";
             this.txtPageLoad.Size = new System.Drawing.Size(106, 26);
             this.txtPageLoad.TabIndex = 0;
-            // 
-            // chbLogError
-            // 
-            this.chbLogError.AutoSize = true;
-            this.chbLogError.Location = new System.Drawing.Point(27, 247);
-            this.chbLogError.Name = "chbLogError";
-            this.chbLogError.Size = new System.Drawing.Size(132, 24);
-            this.chbLogError.TabIndex = 13;
-            this.chbLogError.Text = "Ghi lỗi vào file";
-            this.chbLogError.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
