@@ -103,10 +103,10 @@ namespace MToolkit
                 process.Kill();
             }
             
-            foreach (var process in Process.GetProcessesByName("chromedriver"))
-            {
-                process.Kill();
-            }
+            //foreach (var process in Process.GetProcessesByName("chromedriver"))
+            //{
+            //    process.Kill();
+            //}
             
             MessageBox.Show("Đã dọn sạch hết các tiến trình chạy ngầm");
         }
