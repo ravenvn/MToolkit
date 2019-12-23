@@ -24,7 +24,6 @@ namespace MToolkit.Helpers
 
         public void Test()
         {
-            
         }
 
         public string AutoView(ViewData data)
@@ -176,11 +175,31 @@ namespace MToolkit.Helpers
                             }
                         }
 
-                        // recommended video
-                        //var js = (IJavaScriptExecutor)driver;
-                        //js.ExecuteScript("document.getElementsById('thumbnail').setAttribute('href', 'abcdef')");
-                        //var firstRightVideo = driver.FindElementsById("thumbnail").Where(x => x.Displayed && x.GetAttribute("href") != null).First();
-                        //firstRightVideo.Click();
+                        try
+                        {
+                            // recommended video
+                            var js = (IJavaScriptExecutor)driver;
+                            var query = string.Format("document.querySelectorAll('[id=\"thumbnail\"]').forEach(function(e) {{ if (e.getAttribute('href') != null) e.setAttribute('href', '/watch?v={0}') }});", recommendedVideoId);
+                            js.ExecuteScript(query);
+                            var firstRightVideo = driver.FindElementsById("thumbnail").Where(x => x.Displayed && x.GetAttribute("href") != null).First();
+                            var actions = new Actions(driver);
+                            actions.KeyDown(Keys.Control)
+                                    .Click(firstRightVideo)
+                                    .KeyUp(Keys.Control)
+                                    .Perform();
+                            Thread.Sleep(TimeSpan.FromSeconds(Helper.config.Action_Sleep));
+                            driver.Close();
+                            driver.SwitchTo().Window(driver.WindowHandles.Last());
+                            duration = random.Next(durationMin, durationMax + 1);
+                            Thread.Sleep(TimeSpan.FromSeconds(duration));
+                            UpdateDuration(recommendedVideoId, duration);
+                        }
+                        catch (Exception e)
+                        {
+                            if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
+                        }
+
+
                         status = true;
                     }
 

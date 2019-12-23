@@ -15,7 +15,7 @@ namespace MToolkit.Helpers
 {
     class LoginHelper
     {
-        public string Login(string profile, string email, string password, string recoveryEmail)
+        public string Login(string profile, string proxy, string userAgent, string email, string password, string recoveryEmail, bool getCookieNChannel)
         {
             var response = new LoginResponse
             {
@@ -26,10 +26,10 @@ namespace MToolkit.Helpers
                 Channel_Link = string.Empty
             };
 
-            var driver = Helper.CreateFirefoxDriver(profile);
+            var driver = Helper.CreateFirefoxDriver(profile, proxy, userAgent);
             if (driver == null)
             {
-                response.Detail_Reason = "Không load được profile";
+                response.Detail_Reason = "Không tải đc profile hoặc proxy chết";
                 return JsonConvert.SerializeObject(response);
             }
 
@@ -133,7 +133,7 @@ namespace MToolkit.Helpers
                 response.Detail_Reason = e.Message;
             }
 
-            if (response.Status == true)
+            if (response.Status && getCookieNChannel)
             {
                 GetCookie(driver, ref response);
             }

@@ -25,8 +25,6 @@ namespace MToolkit.Helpers
             FirefoxDriver driver = null;
             try
             {
-                
-
                 var firefoxProfile = new FirefoxProfile(profile);
                 if (userAgent != "")
                 {

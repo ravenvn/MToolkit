@@ -61,9 +61,12 @@ namespace MToolkit
                 case "/login-gmail":
                     return loginHelper.Login(
                         request.QueryString["profile"],
+                        request.QueryString["proxy"],
+                        request.QueryString["user_agent"],
                         request.QueryString["email"],
                         request.QueryString["password"],
-                        request.QueryString["recovery_email"]
+                        request.QueryString["recovery_email"],
+                        request.QueryString["get_cookie_n_channel"] == "0" ? false : true
                     );
                 case "/manual-login":
                     return loginHelper.ManualLogin(request.QueryString["profile"], request.QueryString["email"], request.QueryString["password"]);
