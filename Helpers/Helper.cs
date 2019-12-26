@@ -20,8 +20,6 @@ namespace MToolkit.Helpers
         public static string profileDir = "";
         public static FirefoxDriver CreateFirefoxDriver(string profile, string proxy = "", string userAgent = "")
         {
-            proxy = "";
-            userAgent = "";
             FirefoxDriver driver = null;
             try
             {
@@ -49,7 +47,6 @@ namespace MToolkit.Helpers
                     firefoxProxy.Kind = ProxyKind.Manual;
                     options.Proxy = firefoxProxy;
                 }
-
                 driver = new FirefoxDriver(service, options);
                 if (proxy != "")
                 {
@@ -80,7 +77,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                LogError("Errors.txt", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("Errors.txt", e.Message);
                 if (driver != null)
                 {
                     driver.Close();

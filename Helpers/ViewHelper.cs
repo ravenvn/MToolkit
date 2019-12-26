@@ -23,6 +23,12 @@ namespace MToolkit.Helpers
 
         public void Test()
         {
+            var driver = Helper.CreateFirefoxDriver(@"C:\Users\tin\AppData\Roaming\Mozilla\Firefox\Profiles\huamp3p3.Profile1");
+            driver.Navigate().GoToUrl("https://24h.com.vn");
+            Thread.Sleep(5000);
+            driver.Navigate().GoToUrl("https://vnexpress.net");
+            Thread.Sleep(5000);
+            Helper.CloseBrowser(driver);
         }
 
         public string AutoView(ViewData data)
@@ -80,7 +86,7 @@ namespace MToolkit.Helpers
                         }
                         catch (Exception e)
                         {
-                            if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
+                            if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors.txt", e.Message);
                         }
 
                         // check continue running or not
@@ -97,7 +103,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors.txt", e.Message);
             }
         }
 
@@ -195,7 +201,7 @@ namespace MToolkit.Helpers
                         }
                         catch (Exception e)
                         {
-                            if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
+                            if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors.txt", e.Message);
                         }
 
 
@@ -210,6 +216,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors.txt", e.Message);
                 ReportAccountError(account.Id, e.Message);
             }
 
@@ -245,7 +252,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors.txt", e.Message);
             }
         }
 
@@ -264,7 +271,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors.txt", e.Message);
             }
         }
         
@@ -282,7 +289,7 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors", e.Message);
+                if (Helper.config.Log_Error == 1) Helper.LogError("View_Errors.txt", e.Message);
             }
         }
 

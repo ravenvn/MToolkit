@@ -43,7 +43,7 @@ namespace MToolkit
             if (btnStart.Text == "Start")
             {
                 btnStart.Text = "Stop";
-                ws = new WebServer(Response, "http://127.0.0.1:8080/", "http://localhost:8080/");
+                ws = new WebServer(Response, string.Format("http://*:8080/"));
                 ws.Run();
             }
             else
@@ -109,11 +109,6 @@ namespace MToolkit
             //}
             
             MessageBox.Show("Đã dọn sạch hết các tiến trình chạy ngầm");
-        }
-
-        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.facebook.com/LuDucQuan83");
         }
 
         private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
