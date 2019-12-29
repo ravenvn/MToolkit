@@ -14,7 +14,7 @@ namespace MToolkit
         public bool Like { get; set; }
         public int SubRatio { get; set; }
         public int LikeRatio { get; set; }
-        public string FilterType { get; set; }
+        //public string FilterType { get; set; }
         public int DurationMin { get; set; }
         public int DurationMax { get; set; }
 

@@ -181,33 +181,33 @@ namespace MToolkit.Helpers
                     return JsonConvert.SerializeObject(response);
                 }
 
-                try
-                {
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
-                    var passwordInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
-                    passwordInput.SendKeys(password);
-                    passwordInput.SendKeys(Keys.Enter);
-                }
-                catch (Exception)
-                {
-                    response.Detail_Reason = "Tài khoản không tồn tại";
-                    Helper.CloseBrowser(driver);
+                //try
+                //{
+                //    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
+                //    var passwordInput = wait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
+                //    passwordInput.SendKeys(password);
+                //    passwordInput.SendKeys(Keys.Enter);
+                //}
+                //catch (Exception)
+                //{
+                //    response.Detail_Reason = "Tài khoản không tồn tại";
+                //    Helper.CloseBrowser(driver);
 
-                    return JsonConvert.SerializeObject(response);
-                }
+                //    return JsonConvert.SerializeObject(response);
+                //}
 
-                try
-                {
-                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
-                    wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.Name("password")));
-                }
-                catch (Exception)
-                {
-                    response.Detail_Reason = "Sai mật khẩu";
-                    Helper.CloseBrowser(driver);
+                //try
+                //{
+                //    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Helper.config.Enter_Load));
+                //    wait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.Name("password")));
+                //}
+                //catch (Exception)
+                //{
+                //    response.Detail_Reason = "Sai mật khẩu";
+                //    Helper.CloseBrowser(driver);
 
-                    return JsonConvert.SerializeObject(response);
-                }
+                //    return JsonConvert.SerializeObject(response);
+                //}
 
                 try
                 {

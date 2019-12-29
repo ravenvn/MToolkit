@@ -40,10 +40,12 @@ namespace MToolkit
 
         private void BtnStart_Click(object sender, EventArgs e)
         {
+            //viewHelper.Test();
             if (btnStart.Text == "Start")
             {
                 btnStart.Text = "Stop";
-                ws = new WebServer(Response, string.Format("http://*:8080/"));
+                ws = new WebServer(Response, string.Format("http://127.0.0.1:8080/"));
+                //ws = new WebServer(Response, string.Format("http://*:8080/"));
                 ws.Run();
             }
             else
@@ -79,7 +81,7 @@ namespace MToolkit
                     var data = new ViewData
                     {
                         Accounts = accounts,
-                        FilterType = request.QueryString["filter_type"],
+                        //FilterType = request.QueryString["filter_type"],
                         TitleVideoIds = title_video_ids,
                         DurationMin = Int32.Parse(request.QueryString["duration_min"]),
                         DurationMax = Int32.Parse(request.QueryString["duration_max"]),

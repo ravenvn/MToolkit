@@ -16,6 +16,7 @@ namespace MToolkit.Helpers
     class Helper
     {
         public static Configs config = JsonConvert.DeserializeObject<Configs>(File.ReadAllText("Configs.json"));
+        public static string[] keywords = File.ReadAllLines("Keywords.txt").Where(x => x.Trim() != "").ToArray();
         public static string tempDir = "";
         public static string profileDir = "";
         public static FirefoxDriver CreateFirefoxDriver(string profile, string proxy = "", string userAgent = "")
@@ -77,7 +78,11 @@ namespace MToolkit.Helpers
             }
             catch (Exception e)
             {
-                if (Helper.config.Log_Error == 1) Helper.LogError("Errors.txt", e.Message);
+                if (Helper.config.Log_Error == 1)
+                {
+                    Helper.LogError("Errors.txt", profile + " bị lỗi proxy ko mở được");
+                    Helper.LogError("Errors.txt", e.Message);
+                }
                 if (driver != null)
                 {
                     driver.Close();
@@ -92,19 +97,42 @@ namespace MToolkit.Helpers
         {
             if (driver != null)
             {
-                if (saveHistory) CopyFromTempToProfileDirectory(tempDir, profileDir);
-                driver.Close();
-                driver.Quit();
+                try
+                {
+                    if (saveHistory) CopyFromTempToProfileDirectory(tempDir, profileDir);
+                    driver.Close();
+                    driver.Quit();
+                }
+                catch (Exception e)
+                {
+                    if (Helper.config.Log_Error == 1)
+                    {
+                        Helper.LogError("Errors.txt", profileDir + " ko đóng được trình duyệt");
+                        Helper.LogError("Errors.txt", e.Message);
+                    }
+                }
             }
         }
 
         private static void CopyFromTempToProfileDirectory(string temp, string profile)
         {
-            var dataFiles = Directory.GetFiles(temp, "*.sqlite*");
-            foreach (var dataFile in dataFiles)
+            try
             {
-                File.Copy(dataFile, profile + @"\" + Path.GetFileName(dataFile), true);
+                var dataFiles = Directory.GetFiles(temp, "*.sqlite*");
+                foreach (var dataFile in dataFiles)
+                {
+                    File.Copy(dataFile, profile + @"\" + Path.GetFileName(dataFile), true);
+                }
             }
+            catch (Exception e)
+            {
+                if (Helper.config.Log_Error == 1)
+                {
+                    Helper.LogError("Errors.txt", profile + " ko copy được");
+                    Helper.LogError("Errors.txt", e.Message);
+                }
+            }
+            
 
             #region Copy all files and sub directory. It's caused error when reload profile
             // Copy all files and sub directory. It's caused error  
